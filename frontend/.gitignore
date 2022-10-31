@@ -10,6 +10,7 @@ npm-debug.*
 *.orig.*
 web-build/
 components/Api.js
+login_ex.py
 
 # macOS
 .DS_Store
