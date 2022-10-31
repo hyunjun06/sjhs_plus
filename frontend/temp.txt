@@ -1,0 +1,43 @@
+급식정보
+URL :  https://external.gs.hs.kr/external/api/meal/meal.do  
+PARAM: 
+     
+    	NAME:key        TYPE:VARCHAR(50)         	VALUE={발급키} 
+    	NAME:month  TYPE:CHAR(6)             	VALUE=yyyyMM (ex:201306)
+    	NAME:date    TYPE:CHAR(2)     	VALUE: dd(ex:06) (optional)
+ 
+RESULT :
+     월급식정보(meal)
+     month:급식월 
+     data: 급식데이터(data:list)
+
+
+     급식데이터 (data)
+     	date: 일자		
+     	breakfast: 아침
+     	lunch : 점심
+     	dinner: 저녁
+     	snack : 간식
+     	breakfastFile : 아침사진
+     	lunchFile : 점심사진
+     	dinnerFile : 저녁사진
+     	snackFile : 간식사진
+
+
+
+사진   
+URL : https://external.gs.hs.kr/external/file/thumbnail.do
+PARAM: 
+	
+NAME: fileNo 	TYPE:VARCHAR(50)         VALUE=파일No
+    	NAME: h 	TYPE:NUMBER            	VALUE=가로길이 (optional)
+    	NAME: w 	TYPE:NUMBER            	VALUE=세로길이 (optional)
+
+ 
+
+
+EXAMPLE:
+https://external.gs.hs.kr/external/api/meal/meal.do?key={발급키}&month=202209&date=20 
+
+{"meal":{"month":"202209", "data":[ {"date":"20", "breakfast":"치킨마요덮밥1.5.6.13.15.|유부김치국15.6.9.|`알감자조림5.6.|깍두기9.13.|방울토마토112.|요거트/쨈2.13.", "lunch":"기장밥|낙곱새5.6.9.10.13.|도토리묵채국(온국)5.6.9.13.18.|계란찜1.9.|취나물된장무침5.6.|배추김치9.13.|배", "dinner":"흑미밥|들깨수제비5.6.9.13.|고추장불고기5.6.10.|어묵청경채볶음1.5.6.13.|배추김치9.13.|갈릭파이1.2.5.6.13.", "snack":"", "breakfastFile":"http://external.gs.hs.kr/external/file/thumbnail.do?fileNo=84FCC1E53380109FB799E31384681E4A", "lunchFile":"http://external.gs.hs.kr/external/file/thumbnail.do?fileNo=679D1A443F8CD6626373ED6AC6C867FC", "dinnerFile":"http://external.gs.hs.kr/external/file/thumbnail.do?fileNo=C47E19934D23A062C81A694EA53E2E7A", "snackFile":""}]}}
+f21ef3c3-392d-43b1-9e2f-bf07f24e63c5
