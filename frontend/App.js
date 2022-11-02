@@ -56,7 +56,7 @@ export default function App() {
       <StatusBar style="dark"/>
       <SafeAreaView style={{flex: 1, backgroundColor: theme_light.bg}}>
         <View style={styles.container}>
-          <Topbar yscroll={yscroll}/>
+          <Topbar yscroll={yscroll} setActivePage={setActivePage}/>
           {MainContentModule}
         </View>
         <Navbar dimensions={dimensions} activePage={activePage} setActivePage={setActivePage}/>
