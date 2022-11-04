@@ -4,7 +4,7 @@ import { theme_light } from "../components/colors";
 import { useEffect, useState } from "react";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Calendar } from "react-native-calendars";
-import { getMenuList } from "../components/Api";
+import { getMenuList, getTimeTable } from "../components/Api";
 
 function Meal({ dimensions, setYscroll }) {
     const [date, setDate] = useState(new Date());

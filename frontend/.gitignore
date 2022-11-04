@@ -11,6 +11,8 @@ npm-debug.*
 web-build/
 components/Api.js
 login_ex.py
+temp.txt
+todos.txt
 
 # macOS
 .DS_Store
