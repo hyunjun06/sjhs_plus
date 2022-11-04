@@ -115,10 +115,11 @@ def get_timetable():
         for col in row.find_all('td')[2:]:
             if col.has_attr('class'):
                 # print(str(classNum) + " " + str(dateNum) + ": " + re.sub('\n|\r|\t', '', col.text))
-                timeTable[classNum][dateNum] = ''.join([re.sub('\n|\r|\t', '', div.text).strip() for div in col.find_all('div')])
+                # timeTable[classNum][dateNum] = ''.join([re.sub('\n|\r|\t', '', div.text).strip() for div in col.find_all('div')])
+                timeTable[classNum][dateNum] = col.find_all('div')[0].text.split('[')[0].strip()
             else:
                 # print(str(classNum) + " " + str(dateNum) + ": " + "공강")
-                timeTable[classNum][dateNum] = "공강"
+                timeTable[classNum][dateNum] = ""
             dateNum += 1
         classNum += 1
     

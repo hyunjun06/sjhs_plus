@@ -18,7 +18,6 @@
     "react": "18.0.0",
     "react-native": "0.69.6",
     "react-native-calendars": "^1.1289.0",
-    "react-native-table-component": "^1.2.2",
     "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {
