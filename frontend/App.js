@@ -45,7 +45,7 @@ export default function App() {
     <ScrollView horizontal pagingEnabled={true} showsHorizontalScrollIndicator={false} onScroll={handleOnScroll} scrollEventThrottle={16} ref={scrollView}>
       <Home dimensions={dimensions} setYscroll={setYscroll}/>
       <Meal dimensions={dimensions} setYscroll={setYscroll}/>
-      <Timetable dimensions={dimensions}/>
+      <Timetable dimensions={dimensions} setYscroll={setYscroll}/>
       <Contacts dimensions={dimensions}/>
       <Pass dimensions={dimensions}/>
     </ScrollView>

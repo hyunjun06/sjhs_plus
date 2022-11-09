@@ -1,10 +1,11 @@
-from flask import Flask
+from flask import Flask, send_file
 import re
 import requests
 import os
 from jsbn import RSAKey
 from bs4 import BeautifulSoup
 import re
+import shutil
 
 API_KEY = ""
 
@@ -98,6 +99,13 @@ def get_timetable():
     rawTimeRows = beautifulSoup.find_all('tr')
     timeRows = []
     
+    if len(rawTimeRows) == 0:
+        login()
+        timeTableRequest = requests.get("https://student.gs.hs.kr/student/score/studentTimetable.do", cookies={'JSESSIONID': session_key})
+    
+        beautifulSoup = BeautifulSoup(timeTableRequest.text, 'html.parser')
+        rawTimeRows = beautifulSoup.find_all('tr')
+    
     index = 0
     for row in rawTimeRows:
         if index % 3 == 1:
@@ -122,8 +130,51 @@ def get_timetable():
                 timeTable[classNum][dateNum] = ""
             dateNum += 1
         classNum += 1
+        
+    studentInfo = beautifulSoup.find_all('h3', {'class': 'box-title'})[1].text.strip()
     
-    return {'head': timeTable[0], 'table': timeTable[1:]}
+    return {'head': timeTable[0], 'table': timeTable[1:], 'studentInfo': studentInfo}
+
+@app.route('/api/pfp')
+def get_pfp():
+    if session_key == "NULL":
+        login()
+        
+    pfpRequest = requests.get("https://student.gs.hs.kr/student/mymenu/privateInfo.do", cookies={'JSESSIONID': session_key})
+    
+    beautifulSoup = BeautifulSoup(pfpRequest.text, 'html.parser')
+    pfp = beautifulSoup.find('img', {'alt': '학생사진'})['src']
+    
+    imgRequest = requests.get("https://student.gs.hs.kr" + pfp, cookies={'JSESSIONID': session_key}, stream=True)
+    
+    print(imgRequest.status_code)
+    
+    if not os.path.exists('pfp'):
+        os.makedirs('pfp')
+    
+    if imgRequest.status_code == 200:
+        with open(os.path.join('pfp', session_key + '_img.JPG'), 'wb') as f:
+            imgRequest.raw.decode_content = True
+            shutil.copyfileobj(imgRequest.raw, f)  
+    
+    return send_file(os.path.join('pfp', session_key + '_img.JPG'), mimetype='image/jpg')
+
+@app.route('/api/lost')
+def get_lost():
+    if session_key == "NULL":
+        login()
+        
+    lostRequest = requests.get("https://student.gs.hs.kr/student/notice/missingList.do", cookies={'JSESSIONID': session_key})
+    
+    beautifulSoup = BeautifulSoup(lostRequest.text, 'html.parser')
+    lostItems = beautifulSoup.find_all('tr')
+    
+    lostItems = lostItems[1:6]
+    
+    lostItems = [[re.sub('\n|\r|\t', '', item.find_all('td')[2].text), re.sub('\n|\r|\t', '', item.find_all('td')[3].text)] for item in lostItems]
+    # print(lostItems)
+    
+    return lostItems
 
 if __name__ == '__main__':
     with open("login_cred", "r") as f:

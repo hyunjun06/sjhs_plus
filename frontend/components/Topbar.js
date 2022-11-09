@@ -1,14 +1,37 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import { useState, useEffect } from 'react';
 import { theme_light } from './colors';
 import { useFonts, NotoSansKR_900Black } from '@expo-google-fonts/noto-sans-kr';
+import { getPfpSrc } from './Api';
 
 function Topbar({ yscroll, setActivePage }) {
+    const [pfpObj, setPfpObj] = useState();
+
+    useEffect(() => {
+        if(!pfpObj) {
+            (async () => {
+                const pfpSrc = await getPfpSrc();
+                const pfp = await fetch(pfpSrc);
+                const pfpBlob = await pfp.blob();
+                setPfpObj(URL.createObjectURL(pfpBlob));
+            })();
+        }
+    }, []);
+
     let [fontsLoaded] = useFonts({
         NotoSansKR_900Black,
     });
 
     if(!fontsLoaded) return null;
+
+    const PfpModule = (
+        <View style={{
+            height: 41, width: 41, alignItems: 'center', justifyContent: 'center', backgroundColor: theme_light.bg, borderRadius: 20,
+            padding: 3, borderWidth: 3, borderColor: theme_light.disabled
+        }}>
+            <Image source={{uri: pfpObj}} style={{margin: 7.5, width: 30, height: 30, borderRadius: 40}}/>
+        </View>
+    );
 
     return (
         <View style={{borderBottomColor: `${theme_light.disabled_rgba} ${Math.min(yscroll, 1)})`, borderBottomWidth: 1}}>
@@ -16,10 +39,10 @@ function Topbar({ yscroll, setActivePage }) {
                 <TouchableOpacity onPress={() => setActivePage(1)}>
                     <Text style={styles.logo_text}>송죽학사+</Text>
                 </TouchableOpacity>
-                <Image source={require('../assets/pfp.jpeg')} style={{margin: 7.5, width: 30, height: 30, borderRadius: 40}}/>
+                {PfpModule}
             </View>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

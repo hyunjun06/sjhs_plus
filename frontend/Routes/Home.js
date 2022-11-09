@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { theme_light } from '../components/colors';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { useFonts, NotoSansKR_900Black, NotoSansKR_100Thin, NotoSansKR_400Regular, NotoSansKR_700Bold } from '@expo-google-fonts/noto-sans-kr';
-import { getMenuList, getTimeTable } from '../components/Api';
+import { getLostList, getMenuList, getTimeTable } from '../components/Api';
 
 const BREAKFAST_TIME_END = 8 + 40 / 60, LUNCH_TIME_END = 13 + 40 / 60, DINNER_TIME_END = 19;
 const SUBJECT_END = [0, 9 + 50 / 60, 10 + 50 / 60, 11 + 50 / 60, 12 + 50 / 60, 14 + 40 / 60, 15 + 40 / 60, 16 + 40 / 60];
@@ -22,7 +22,8 @@ function getActiveIndex() {
 
 function Home({ dimensions, setYscroll }) {
     const [menus, setMenus] = useState();
-    const [timeTable, settimeTable] = useState(["국어", "국어", "정보과학II", "정보과학II", "기초물리학실험II", "기초물리학실험II", "공강"]);
+    const [timeTable, setTimeTable] = useState();
+    const [lostList, setLostList] = useState();
     
     useEffect(() => {
         if(!menus) {
@@ -33,6 +34,25 @@ function Home({ dimensions, setYscroll }) {
             })();
         }
     }, [menus]);
+
+    useEffect(() => {
+        if(!timeTable) {
+            (async () => {
+                const table = await getTimeTable();
+                const day = new Date().getDay();
+                const tableColumn = table.table.map(row => row[day] == "" ? "공강" : row[day]);
+                setTimeTable(tableColumn.slice(0, 7));
+            })();
+        }
+    }, []);
+
+    useEffect(() => {
+        if(!lostList) {
+            (async () => {
+                setLostList(await getLostList());
+            })();
+        }
+    }, []);
 
     let [fontsLoaded] = useFonts({
         NotoSansKR_900Black,
@@ -76,12 +96,96 @@ function Home({ dimensions, setYscroll }) {
     );
 
     const ScheduleModule = (
+        timeTable ?
         <View style={{flex: 1, marginBottom: 30}}>
             <Text style={{...styles.hashtag, marginHorizontal: 20}}>#집가고싶다</Text>
             <Text style={{...styles.label, marginHorizontal: 20}}>일정</Text>
             {/* ScrollView for Schdules */}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {timeTable.map((subject, index) => {
+                    // FOR GRADIENT OUTLINE(ARCHIVED)
+                    // const isActive = index + 1 == getActiveIndex();
+                    // return (isActive ?
+                    //     <LinearGradient
+                    //         colors={['#00FFFF', '#17C8FF', '#329BFF', '#4C64FF', '#6536FF', '#8000FF']}
+                    //         start={{x: 0.0, y: 1.0}} end={{x: 1.0, y: 1.0}}
+                    //         style={{
+                    //             width: dimensions.window.width / 3 + 2.5,
+                    //             height: dimensions.window.width / 3 + 2.5,
+                    //             marginLeft: index == 0 ? 20 : 0,
+                    //             marginRight: index == timeTable.length - 1 ? 20 : 10,
+                    //             alignItems: 'center',
+                    //             justifyContent: 'center',
+                    //             borderRadius: 12,
+                    //         }}
+                    //     >
+                    //         {/* Schedule module */}
+                    //         <View key={index} style={{
+                    //             backgroundColor: theme_light.bg,
+                    //             borderRadius: 10,  
+                    //             width: dimensions.window.width / 3,
+                    //             height: dimensions.window.width / 3,
+                    //             borderColor: theme_light.bg,
+                    //             borderWidth: 2.5,
+                    //             padding: 10, 
+                    //             width: dimensions.window.width / 3,
+                    //             height: dimensions.window.width / 3,
+                    //             alignItems: 'center',
+                    //             justifyContent: 'center',
+                    //         }}>
+                    //             <Text style={{color: theme_light.text_invert, fontFamily: 'NotoSansKR_400Regular'}}>{index + 1}교시:</Text>
+                    //             <Text style={{color: theme_light.text_invert, fontFamily: 'NotoSansKR_700Bold', fontSize: 20, textAlign: 'center'}}>{subject}</Text>
+                    //         </View>
+                    //     </LinearGradient>
+                    //     :
+                    //     <View
+                    //         style={{
+                    //             width: dimensions.window.width / 3 + 2.5,
+                    //             height: dimensions.window.width / 3 + 2.5,
+                    //             marginLeft: index == 0 ? 20 : 0,
+                    //             marginRight: index == timeTable.length - 1 ? 20 : 10,
+                    //             alignItems: 'center',
+                    //             justifyContent: 'center',
+                    //             borderRadius: 12,
+                    //             backgroundColor: theme_light.disabled,
+                    //         }}
+                    //     >
+                    //         {/* Schedule module */}
+                    //         <View key={index} style={{
+                    //             backgroundColor: theme_light.bg,
+                    //             borderRadius: 10,  
+                    //             margin: 0,
+                    //             padding: 10, 
+                    //             width: dimensions.window.width / 3,
+                    //             height: dimensions.window.width / 3,
+                    //             alignItems: 'center',
+                    //             justifyContent: 'center',
+                    //         }}>
+                    //             <Text style={{color: theme_light.disabled, fontFamily: 'NotoSansKR_400Regular'}}>{index + 1}교시:</Text>
+                    //             <MaskedView
+                    //                 maskElement={
+                    //                     <Text style={{color: theme_light.disabled, fontFamily: 'NotoSansKR_700Bold', fontSize: 20, textAlign: 'center'}}>
+                    //                         {subject}
+                    //                     </Text>
+                    //                 }
+                    //             >
+                    //                 <LinearGradient
+                    //                     colors={['#00FFFF', '#17C8FF', '#329BFF', '#4C64FF', '#6536FF', '#8000FF']}
+                    //                     start={{x: 0.0, y: 1.0}} end={{x: 1.0, y: 1.0}}
+                    //                     style={{
+                    //                         width: dimensions.window.width / 3 + 2.5,
+                    //                         height: dimensions.window.width / 3 + 2.5,
+                    //                         marginLeft: index == 0 ? 20 : 0,
+                    //                         marginRight: index == timeTable.length - 1 ? 20 : 10,
+                    //                         alignItems: 'center',
+                    //                         justifyContent: 'center',
+                    //                         borderRadius: 12,
+                    //                     }}
+                    //                 ></LinearGradient>
+                    //             </MaskedView>
+                    //         </View>
+                    //     </View>
+                    // );
                     const color = index + 1 == getActiveIndex() ? theme_light.ui : theme_light.disabled;
                     return (
                         // Schedule module
@@ -103,6 +207,8 @@ function Home({ dimensions, setYscroll }) {
                 })}
             </ScrollView>
         </View>
+        :
+        <View></View>
     );
 
     const MealModule = (
@@ -116,8 +222,15 @@ function Home({ dimensions, setYscroll }) {
     const LostModule = (
         <View style={{flex: 1, marginBottom: 30, marginHorizontal: 20}}>
             <Text style={styles.hashtag}>#어디갔지</Text>
-            <Text style={styles.label}>분실물</Text>
-            {/* TODO: 분실물 API */}
+            <Text style={styles.label}>분실물 <Text style={{fontSize: 15, fontFamily: 'NotoSansKR_100Thin'}}>(최근 5개 게시글)</Text></Text>
+            <View>
+                {lostList ? lostList.map((item, index) => (
+                    <View key={index}>
+                        <Text style={styles.label}>{item[0]}</Text>
+                        <Text>{item[1]}</Text>
+                    </View>
+                )) : <Text>로딩중...</Text>}
+            </View>
         </View>
     );
 
