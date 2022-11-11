@@ -71,7 +71,7 @@ def catch_all(path):
 # date format e.g. 20220101
 @app.route('/api/menus/<date>')
 def get_menus(date):
-    print("request for date: ", date)
+    # print("request for date: ", date)
     month = date[:6]
     day = date[6:]
     
@@ -182,9 +182,9 @@ def get_contacts(type):
         login()
     
     if type == "student": 
-        contactsRequest = requests.get("https://student.gs.hs.kr/student/searchStudent.do?page=1&pageOnCnt=10000&target=undefined&isGrade=N&callback=undefined", cookies={'JSESSIONID': session_key})
+        contactsRequest = requests.get("https://student.gs.hs.kr/student/searchStudent.do?page=1&pageOnCnt=1000&target=undefined&isGrade=N&callback=undefined", cookies={'JSESSIONID': session_key})
     elif type == "teacher":
-        contactsRequest = requests.get("https://student.gs.hs.kr/student/searchTeacher.do?page=1&pageOnCnt=10000&target=undefined&isGrade=N&callback=undefined", cookies={'JSESSIONID': session_key})
+        contactsRequest = requests.get("https://student.gs.hs.kr/student/searchTeacher.do?target=undefined&terms=name&search=&sphere=&pageOnCnt=1000", cookies={'JSESSIONID': session_key})
     else:
         return {'list': "invaild type"}
     
