@@ -176,6 +176,31 @@ def get_lost():
     
     return lostItems
 
+@app.route('/api/contacts/<type>')
+def get_contacts(type):
+    if session_key == "NULL":
+        login()
+    
+    if type == "student": 
+        contactsRequest = requests.get("https://student.gs.hs.kr/student/searchStudent.do?page=1&pageOnCnt=10000&target=undefined&isGrade=N&callback=undefined", cookies={'JSESSIONID': session_key})
+    elif type == "teacher":
+        contactsRequest = requests.get("https://student.gs.hs.kr/student/searchTeacher.do?page=1&pageOnCnt=10000&target=undefined&isGrade=N&callback=undefined", cookies={'JSESSIONID': session_key})
+    else:
+        return {'list': "invaild type"}
+    
+    beautifulSoup = BeautifulSoup(contactsRequest.text, 'html.parser')
+    contacts = beautifulSoup.find_all('tr')
+    
+    contacts = [tr.find_all('td') for tr in contacts][1:]
+    if type == "student":
+        contacts = [{'grade': td[1].text, 'class': td[2].text, 'number': td[3].text, 'name': td[4].text, 'contact': td[5].text} for td in contacts]
+    elif type == "teacher":
+        contacts = [{'name': td[1].text, 'subject': td[2].text, 'grade': td[3].text, 'class': td[4].text, 'contact': td[5].text} for td in contacts]
+    
+    # print(contacts[:5])
+    
+    return {'list': contacts}
+
 if __name__ == '__main__':
     with open("login_cred", "r") as f:
         id = f.readline()

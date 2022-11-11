@@ -26,10 +26,10 @@ function Topbar({ yscroll, setActivePage }) {
 
     const PfpModule = (
         <View style={{
-            height: 41, width: 41, alignItems: 'center', justifyContent: 'center', backgroundColor: theme_light.bg, borderRadius: 20,
-            padding: 3, borderWidth: 3, borderColor: theme_light.disabled
+            alignItems: 'center', justifyContent: 'center', backgroundColor: theme_light.bg
+            /* FOR OUTLINE(ARCHIVED) padding: 3, borderWidth: 3, borderColor: theme_light.disabled */
         }}>
-            <Image source={{uri: pfpObj}} style={{margin: 7.5, width: 30, height: 30, borderRadius: 40}}/>
+            <Image source={{uri: pfpObj}} style={{margin: 7.5, width: 35, height: 35, borderRadius: 40}}/>
         </View>
     );
 

@@ -28,13 +28,13 @@ function Timetable({ dimensions, setYscroll }) {
 
     const TimeTableModule = (timeTable ?
         <View style={{flex: 1, marginHorizontal: 0, padding: 0}}>
-            <View style={{backgroundColor: theme_light.disabled, marginHorizontal: -20, flex: 1, flexDirection: "row", paddingHorizontal: 20}}>
-                {timeTable.head.map((item, index) => <Text key={index} style={{...styles.tableText, flex: 1}}>{item}</Text>)}
+            <View style={{marginHorizontal: -20, flex: 1, flexDirection: "row", paddingHorizontal: 20}}>
+                {timeTable.head.map((item, index) => <Text key={index} style={{...styles.tableHead}}>{item}</Text>)}
             </View>
             <View style={styles.tableContainer}>
                 {timeTable.table.map((row, rindex) => <View key={rindex} style={styles.rowContainer}>
-                    {row.map((item, cindex) => <View key={rindex * 10 + cindex} style={{...styles.tableItem, backgroundColor: cindex == 0 ? theme_light.disabled : theme_light.bg}}>
-                        <Text style={styles.tableText}>{item}</Text>
+                    {row.map((item, cindex) => <View key={rindex * 10 + cindex} style={styles.tableItem}>
+                        <Text style={cindex == 0 ? styles.tableStart : styles.tableText}>{item}</Text>
                     </View>)}
                 </View>)}
             </View>
@@ -47,7 +47,7 @@ function Timetable({ dimensions, setYscroll }) {
         <View style={{...styles.container, width: dimensions.window.width, marginHorizontal: 0}}>
             <ScrollView showsVerticalScrollIndicator={false} onScroll={handleOnScroll} scrollEventThrottle={16} contentContainerStyle={{minHeight: dimensions.window.height - 120}}>
                 <Text style={{fontFamily: 'NotoSansKR_700Bold', fontSize: 30, color: theme_light.text, marginBottom: 10, marginHorizontal: 20}}>시간표</Text>
-                <Text style={{fontFamily: 'NotoSansKR_400Regular', fontSize: 20, color: theme_light.text, marginBottom: 10, marginLeft: 10}}>
+                <Text style={{fontFamily: 'NotoSansKR_700Bold', fontSize: 20, color: theme_light.text, marginBottom: 10, textAlign: 'center'}}>
                     {timeTable ? timeTable.studentInfo : "로딩중..."}
                 </Text>
                 {TimeTableModule}
@@ -83,7 +83,20 @@ const styles = StyleSheet.create({
         fontFamily: 'NotoSansKR_100Thin',
         alignSelf: "center",
         textAlign: "center",
-    }
+    },
+    tableHead: {
+        fontFamily: 'NotoSansKR_400Regular',
+        alignSelf: "center",
+        textAlign: "center",
+        color: theme_light.ui,
+        flex: 1
+    },
+    tableStart: {
+        fontFamily: 'NotoSansKR_400Regular',
+        alignSelf: "center",
+        textAlign: "center",
+        color: theme_light.ui,
+    },
 });
 
 export default Timetable;

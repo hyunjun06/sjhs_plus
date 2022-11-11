@@ -208,7 +208,10 @@ function Home({ dimensions, setYscroll }) {
             </ScrollView>
         </View>
         :
-        <View></View>
+        <View style={{flex: 1, marginBottom: 30}}>
+            <Text style={{...styles.hashtag, marginHorizontal: 20}}>#집가고싶다</Text>
+            <Text style={{...styles.label, marginHorizontal: 20}}>일정</Text>
+        </View>
     );
 
     const MealModule = (
@@ -225,9 +228,12 @@ function Home({ dimensions, setYscroll }) {
             <Text style={styles.label}>분실물 <Text style={{fontSize: 15, fontFamily: 'NotoSansKR_100Thin'}}>(최근 5개 게시글)</Text></Text>
             <View>
                 {lostList ? lostList.map((item, index) => (
-                    <View key={index}>
-                        <Text style={styles.label}>{item[0]}</Text>
-                        <Text>{item[1]}</Text>
+                    <View key={index} style={{flexDirection: "row", marginBottom: 5}}>
+                        <View style={{height: 55, width: 5, backgroundColor: theme_light.ui, marginRight: 10, borderRadius: 5}}></View>
+                        <View style={{justifyContent: "center"}}>
+                            <Text style={styles.text}>{item[0]}</Text>
+                            <Text style={styles.textLi}>{item[1]}</Text>
+                        </View>
                     </View>
                 )) : <Text>로딩중...</Text>}
             </View>
@@ -262,6 +268,16 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontFamily: 'NotoSansKR_700Bold',
         marginBottom: 10,
+    },
+    text: {
+        color: theme_light.text,
+        fontSize: 20,
+        fontFamily: 'NotoSansKR_400Regular',
+    },
+    textLi: {
+        color: theme_light.text,
+        fontSize: 15,
+        fontFamily: 'NotoSansKR_100Thin'
     },
     image: {
         height: 200,
