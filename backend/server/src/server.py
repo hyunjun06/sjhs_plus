@@ -49,7 +49,7 @@ def login():
         code = input("code: ")
         try:
             logInReq = requests.post("https://student.gs.hs.kr/student/loginCommit.do",
-                                    data={'type': 'STUD', 'userId': id, 'pwd': password, 'accessCode': code, "mode": "ONE", "guid": "MOZILLAMACINTOSHINTELMACOSXAPPLEWEBKITKHTMLLIKEGECKOCHROMESAFARI", "device": "chrome", "returnUrl": "/index.do"}, cookies={'JSESSIONID': temporaryToken, 'userId': id},
+                                    data={'type': 'STUD', 'userId': id, 'pwd': password, 'accessCode': code, "mode": "ONE", "guid": "MOZILLAMACINTOSHINTELMACOSXAPPLEWEBKITKHTMLLIKEGECKOCHROMESAFARI", "device": "chrome", "returnUrl": "/index.do", "mode": "auto"}, cookies={'JSESSIONID': temporaryToken, 'userId': id},
                                     headers={
                                         'Content-Type': 'application/x-www-form-urlencoded'},
                                     allow_redirects=False

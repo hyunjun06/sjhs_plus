@@ -36,8 +36,10 @@ export default function App() {
     if(scrollPosition == 0) setActivePage(1);
     else if(scrollPosition == dimensions.window.width * 1) setActivePage(2);
     else if(scrollPosition == dimensions.window.width * 2) setActivePage(3);
-    else if(scrollPosition == dimensions.window.width * 3) setActivePage(4);
-    else if(scrollPosition == dimensions.window.width * 4) setActivePage(5);
+    else if(scrollPosition == dimensions.window.width * 3) {
+      setActivePage(4);
+      setYscroll(0);
+    } else if(scrollPosition == dimensions.window.width * 4) setActivePage(5);
   };
 
   const MainContentModule = (

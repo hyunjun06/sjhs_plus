@@ -229,9 +229,8 @@ function Home({ dimensions, setYscroll }) {
             <View>
                 {lostList ? lostList.map((item, index) => (
                     <View key={index} style={{flexDirection: "row", marginBottom: 5}}>
-                        <View style={{height: 55, width: 5, backgroundColor: theme_light.ui, marginRight: 10, borderRadius: 5}}></View>
-                        <View style={{justifyContent: "center"}}>
-                            <Text style={styles.text}>{item[0]}</Text>
+                        <View style={{justifyContent: "center", borderRightColor: theme_light.ui, borderLeftWidth: 5, paddingLeft: 10, borderRadius: 5}}>
+                            <Text style={styles.text} numberOfLines={1}>{item[0]}</Text>
                             <Text style={styles.textLi}>{item[1]}</Text>
                         </View>
                     </View>
@@ -262,22 +261,28 @@ const styles = StyleSheet.create({
         color: theme_light.highlight,
         fontSize: 20,
         fontFamily: 'NotoSansKR_100Thin',
+        includeFontPadding: false,
     },
     label: {
         color: theme_light.text,
         fontSize: 30,
         fontFamily: 'NotoSansKR_700Bold',
+        includeFontPadding: false,
         marginBottom: 10,
     },
     text: {
         color: theme_light.text,
         fontSize: 20,
         fontFamily: 'NotoSansKR_400Regular',
+        margin: 0,
+        includeFontPadding: false,
     },
     textLi: {
         color: theme_light.text,
         fontSize: 15,
-        fontFamily: 'NotoSansKR_100Thin'
+        fontFamily: 'NotoSansKR_100Thin',
+        margin: 0,
+        includeFontPadding: false,
     },
     image: {
         height: 200,

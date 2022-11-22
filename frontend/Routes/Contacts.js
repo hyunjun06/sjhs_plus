@@ -5,16 +5,25 @@ import { theme_light } from "../components/colors";
 import { getContacts } from "../components/Api";
 
 function Contacts({ dimensions }) {
+    const [studentContacts, setStudentContacts] = useState();
+    const [teacherContacts, setTeacherContacts] = useState();
     const [contacts, setContacts] = useState();
     const [searchValue, setSearchValue] = useState("");
     const [activeType, setActiveType] = useState("student");
 
     useEffect(() => {
         (async () => {
-            const contactsList = await getContacts(activeType);
-            setContacts(contactsList);
+            const studentContactsList = await getContacts("student");
+            setStudentContacts(studentContactsList);
+            const teacherContatsList = await getContacts("teacher");
+            setTeacherContacts(teacherContatsList);
         })();
-    }, [activeType]);
+    }, []);
+
+    useEffect(() => {
+        if(activeType == "student") setContacts(studentContacts);
+        else setContacts(teacherContacts);
+    }, [activeType, studentContacts, teacherContacts]);
     
 
     let [fontsLoaded] = useFonts({
@@ -58,7 +67,7 @@ function Contacts({ dimensions }) {
 
     const ContactListTeacherModule = () => {
         return (contacts ? <ScrollView>
-            {contacts.list.filter((item) => `${item.name}${item.subject}`.includes(searchValue) && item.class != 0).map((item, index) => <View key={index}>
+            {contacts.list.filter((item) => `${item.name}${item.subject}`.includes(searchValue)).map((item, index) => <View key={index}>
                 <View style={styles.contactItem}>
                     <View style={{flexDirection: "row"}}>
                         <Text style={styles.contactName}>{item.name}</Text>
@@ -93,6 +102,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderBottomColor: theme_light.text,
         fontFamily: 'NotoSansKR_100Thin',
+        includeFontPadding: false,
         fontSize: 20,
         marginBottom: 20,
     },
@@ -105,27 +115,32 @@ const styles = StyleSheet.create({
     },
     contactGradeClass: {
         fontFamily: 'NotoSansKR_700Bold',
+        includeFontPadding: false,
         fontSize: 30,
         color: theme_light.ui,
         marginBottom: 10,
     },
     contactName: {
         fontFamily: 'NotoSansKR_400Regular',
+        includeFontPadding: false,
         fontSize: 20,
         color: theme_light.text,
         marginRight: 5,
     },
     contactNumber: {
         fontFamily: 'NotoSansKR_100Thin',
+        includeFontPadding: false,
         fontSize: 15,
         marginTop: 5,
     },
     contactContact: {
         fontFamily: 'NotoSansKR_100Thin',
+        includeFontPadding: false,
         fontSize: 15,
     },
     buttonText: {
         fontFamily: 'NotoSansKR_700Bold',
+        includeFontPadding: false,
         fontSize: 20,
         color: theme_light.text,
         marginRight: 10
@@ -135,6 +150,7 @@ const styles = StyleSheet.create({
     },
     buttonDisabledText: {
         fontFamily: 'NotoSansKR_700Bold',
+        includeFontPadding: false,
         fontSize: 20,
         color: theme_light.disabled,
         marginRight: 10

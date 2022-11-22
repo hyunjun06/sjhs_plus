@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
       color: theme_light.text,
       fontSize: 30,
       fontFamily: 'NotoSansKR_900Black',
+      includeFontPadding: false,
     },
 });
 
