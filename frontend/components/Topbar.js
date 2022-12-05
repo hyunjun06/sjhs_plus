@@ -4,19 +4,21 @@ import { theme_light } from './colors';
 import { useFonts, NotoSansKR_900Black } from '@expo-google-fonts/noto-sans-kr';
 import { getPfpSrc } from './Api';
 
-function Topbar({ yscroll, setActivePage }) {
+function Topbar({ yscroll, setActivePage, serverIp }) {
     const [pfpObj, setPfpObj] = useState();
 
     useEffect(() => {
         if(!pfpObj) {
             (async () => {
-                const pfpSrc = await getPfpSrc();
-                const pfp = await fetch(pfpSrc);
-                const pfpBlob = await pfp.blob();
-                setPfpObj(URL.createObjectURL(pfpBlob));
+                const pfpSrc = await getPfpSrc(serverIp);
+                if(pfpSrc) {
+                    const pfp = await fetch(pfpSrc);
+                    const pfpBlob = await pfp.blob();
+                    setPfpObj(URL.createObjectURL(pfpBlob));
+                }
             })();
         }
-    }, []);
+    }, [serverIp]);
 
     let [fontsLoaded] = useFonts({
         NotoSansKR_900Black,

@@ -4,15 +4,15 @@ import { useFonts, NotoSansKR_700Bold, NotoSansKR_100Thin, NotoSansKR_400Regular
 import { theme_light } from "../components/colors";
 import { getTimeTable } from "../components/Api";
 
-function Timetable({ dimensions, setYscroll }) {
+function Timetable({ dimensions, setYscroll, serverIp }) {
     const [timeTable, setTimeTable] = useState();
 
     useEffect(() => {
         (async () => {
-            const table = await getTimeTable();
+            const table = await getTimeTable(serverIp);
             setTimeTable(table);
         })();
-    }, []);
+    }, [serverIp]);
 
     let [fontsLoaded] = useFonts({
         NotoSansKR_700Bold,

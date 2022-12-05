@@ -4,7 +4,7 @@ import { useFonts, NotoSansKR_700Bold, NotoSansKR_100Thin, NotoSansKR_400Regular
 import { theme_light } from "../components/colors";
 import { getContacts } from "../components/Api";
 
-function Contacts({ dimensions }) {
+function Contacts({ dimensions, serverIp }) {
     const [studentContacts, setStudentContacts] = useState();
     const [teacherContacts, setTeacherContacts] = useState();
     const [contacts, setContacts] = useState();
@@ -13,12 +13,12 @@ function Contacts({ dimensions }) {
 
     useEffect(() => {
         (async () => {
-            const studentContactsList = await getContacts("student");
+            const studentContactsList = await getContacts("student", serverIp);
             setStudentContacts(studentContactsList);
-            const teacherContatsList = await getContacts("teacher");
+            const teacherContatsList = await getContacts("teacher", serverIp);
             setTeacherContacts(teacherContatsList);
         })();
-    }, []);
+    }, [serverIp]);
 
     useEffect(() => {
         if(activeType == "student") setContacts(studentContacts);

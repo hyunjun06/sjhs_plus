@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ScrollView, Dimensions, Text, TextInput } from 'react-native';
 import Navbar from './components/Navbar';
 import { theme_light } from './components/colors';
 import { Fragment, useState, useEffect, useRef } from 'react';
@@ -10,6 +10,7 @@ import Meal from './Routes/Meal';
 import Timetable from './Routes/Timetable';
 import Contacts from './Routes/Contacts';
 import Pass from './Routes/Pass';
+import { setNewServerIp } from './components/Api';
 
 const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
@@ -18,6 +19,7 @@ export default function App() {
   const [activePage, setActivePage] = useState(1);
   const [dimensions, setDimensions] = useState({ window, screen });
   const [yscroll, setYscroll] = useState(0);
+  const [serverIp, setServerIp] = useState("");
   const scrollView = useRef(null);
 
   useEffect(() => {
@@ -45,12 +47,20 @@ export default function App() {
   const MainContentModule = (
     // Horizontal Page Scroll
     <ScrollView horizontal pagingEnabled={true} showsHorizontalScrollIndicator={false} onScroll={handleOnScroll} scrollEventThrottle={16} ref={scrollView}>
-      <Home dimensions={dimensions} setYscroll={setYscroll}/>
-      <Meal dimensions={dimensions} setYscroll={setYscroll}/>
-      <Timetable dimensions={dimensions} setYscroll={setYscroll}/>
-      <Contacts dimensions={dimensions}/>
+      <Home dimensions={dimensions} setYscroll={setYscroll} serverIp={serverIp}/>
+      <Meal dimensions={dimensions} setYscroll={setYscroll} serverIp={serverIp}/>
+      <Timetable dimensions={dimensions} setYscroll={setYscroll} serverIp={serverIp}/>
+      <Contacts dimensions={dimensions} serverIp={serverIp}/>
       <Pass dimensions={dimensions}/>
     </ScrollView>
+  );
+
+  // FOR TESTING PURPOSES
+  const TestModule = (
+    <View style={{backgroundColor: theme_light.disabled, paddingHorizontal: 20, paddingVertical: 10}}>
+        <Text>FOR TESTING PURPOSES** SERVER IP:</Text>
+        <TextInput onChangeText={setServerIp} value={serverIp} style={{borderBottomWidth: 1, borderBottomColor: theme_light.text}}/>
+    </View>
   );
 
   return (
@@ -58,8 +68,10 @@ export default function App() {
       <StatusBar style="dark"/>
       <SafeAreaView style={{flex: 1, backgroundColor: theme_light.bg}}>
         <View style={styles.container}>
-          <Topbar yscroll={yscroll} setActivePage={setActivePage}/>
+          <Topbar yscroll={yscroll} setActivePage={setActivePage} serverIp={serverIp}/>
           {MainContentModule}
+          {/* Will delete this later */}
+          {TestModule}
         </View>
         <Navbar dimensions={dimensions} activePage={activePage} setActivePage={setActivePage}/>
       </SafeAreaView>

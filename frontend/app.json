@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "sjhs_plus",
+    "name": "송죽학사+",
     "slug": "sjhs_plus",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.hyunjun.sjhsplus"
     },
     "android": {
       "adaptiveIcon": {

@@ -20,39 +20,30 @@ function getActiveIndex() {
     for(let i = SUBJECT_END.length - 1; i >= 0; i--) if(new Date().getHours() + new Date().getMinutes() / 60 > SUBJECT_END[i]) return i + 1;
 }
 
-function Home({ dimensions, setYscroll }) {
+function Home({ dimensions, setYscroll, serverIp }) {
     const [menus, setMenus] = useState();
     const [timeTable, setTimeTable] = useState();
     const [lostList, setLostList] = useState();
     
     useEffect(() => {
-        if(!menus) {
-            (async () => {
-                const getNextDay = new Date().getHours() >= DINNER_TIME_END;
-                const menuList =  await getMenuList(getNextDay);
-                setMenus(menuList);
-            })();
-        }
-    }, [menus]);
+        console.log("Called");
+        (async () => {
+            const getNextDay = new Date().getHours() >= DINNER_TIME_END;
+            const menuList =  await getMenuList(getNextDay, serverIp);
+            setMenus(menuList);
+        })();
 
-    useEffect(() => {
-        if(!timeTable) {
-            (async () => {
-                const table = await getTimeTable();
-                const day = new Date().getDay();
-                const tableColumn = table.table.map(row => row[day] == "" ? "공강" : row[day]);
-                setTimeTable(tableColumn.slice(0, 7));
-            })();
-        }
-    }, []);
+        (async () => {
+            const table = await getTimeTable(serverIp);
+            const day = new Date().getDay();
+            const tableColumn = table?.table.map(row => row[day] == "" ? "공강" : row[day]);
+            setTimeTable(tableColumn?.slice(0, 7));
+        })();
 
-    useEffect(() => {
-        if(!lostList) {
-            (async () => {
-                setLostList(await getLostList());
-            })();
-        }
-    }, []);
+        (async () => {
+            setLostList(await getLostList(serverIp));
+        })();
+    }, [serverIp]);
 
     let [fontsLoaded] = useFonts({
         NotoSansKR_900Black,

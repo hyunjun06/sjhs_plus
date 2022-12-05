@@ -4,19 +4,19 @@ import { theme_light } from "../components/colors";
 import { useEffect, useState } from "react";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Calendar } from "react-native-calendars";
-import { getMenuList, getTimeTable } from "../components/Api";
+import { getMenuList } from "../components/Api";
 
-function Meal({ dimensions, setYscroll }) {
+function Meal({ dimensions, setYscroll, serverIp }) {
     const [date, setDate] = useState(new Date());
     const [calendarOpen, setCalendarOpen] = useState(false);
     const [menus, setMenus] = useState();
 
     useEffect(() => {
         (async () => {
-            const menuList = await getMenuList(date);
+            const menuList = await getMenuList(date, serverIp);
             setMenus(menuList);
         })();
-    }, [date.getDate()]);
+    }, [date.getDate(), serverIp]);
 
     let [fontsLoaded] = useFonts({
         NotoSansKR_700Bold,
