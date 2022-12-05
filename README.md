@@ -1,4 +1,6 @@
 # 송죽학사+ SJHS_PLUS
+<p> Simple react native project for school </p>
+
 ## Files to be ignored
 login_cred, session_key -> only for development
 
