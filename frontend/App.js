@@ -10,7 +10,6 @@ import Meal from './Routes/Meal';
 import Timetable from './Routes/Timetable';
 import Contacts from './Routes/Contacts';
 import Pass from './Routes/Pass';
-import { setNewServerIp } from './components/Api';
 
 const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
